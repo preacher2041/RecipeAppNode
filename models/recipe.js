@@ -23,8 +23,8 @@ const Recipe = mongoose.model('Recipe', new mongoose.Schema({
 const validate = (recipe) => {
 	const schema = Joi.object({
 		name: Joi.string().min(5).max(50).required(),
-		ingredients: Joi.string().required(),
-		method: Joi.string.min(20).max(50).required()
+		ingredients: Joi.array().items(Joi.string()),
+		method: Joi.string().min(20).max(50).required()
 	});
 	
 	return schema.validate(recipe)
