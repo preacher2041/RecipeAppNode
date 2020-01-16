@@ -10,7 +10,7 @@ const databaseDebugger = require('debug')('app:database');
 app.use(express.json());
 app.use(helmet());
 
-if (process.env.NODE_ENV === 'development ') {
+if (process.env.NODE_ENV === 'development') {
 	app.use(morgan('tiny'));
 	startupDebugger('Development mode');
 }
@@ -24,9 +24,9 @@ mongoose.connect('mongodb://localhost/recipesApp',  { useNewUrlParser: true, use
 
 // Routes
 const home = require('./routes/home');
-const categories = require('./routes/categories');
+const categories = require('./routes/foodTypes');
 
-app.use('/api/categories', categories);
+app.use('/api/food-types', categories);
 app.use('/', home);
 
 // Start web server
