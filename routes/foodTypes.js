@@ -1,19 +1,9 @@
 const express = require('express');
-
 const router = express.Router();
 const mongooseDebugger = require('debug')('app:mongoose');
-const {FoodType} = require('../models/foodType');
-const {validate} = require('../models/foodType');
+const {FoodType, validate} = require('../models/foodType');
 
-// const getCategories = async () => {
-// 	const categories = await Category.find({author: 'preacher2041'})
-// 		.select({name: 1, tags: 1});
-// 	console.log(categories);
-// };
-//
-// getCategories();
-
-// Get all recipe categories
+// Get all food types
 router.get('/', async (req, res) => {
 	const foodType = await FoodType
 		.find()
@@ -22,7 +12,7 @@ router.get('/', async (req, res) => {
 	res.send(foodType);
 });
 
-// Create new recipe categories
+// Create new food type
 router.post('/', async (req, res) => {
 	const {error} = validate(req.body);
 	if (error) return res.status(400).send(error.details[0].message);
@@ -34,7 +24,7 @@ router.post('/', async (req, res) => {
 	res.send(foodType);
 });
 
-// Get single recipe category
+// Get single food type
 router.get('/:id', async (req, res) => {
 	const foodType = await FoodType.findById(req.params.id).find();
 	
@@ -43,7 +33,7 @@ router.get('/:id', async (req, res) => {
 	res.send(foodType);
 });
 
-// Update single recipe category
+// Update single food type
 router.put('/:id', async (req, res) => {
 	mongooseDebugger(req.params);
 	const {error} = validate(req.body);
@@ -63,7 +53,7 @@ router.put('/:id', async (req, res) => {
 	res.send(foodType);
 });
 
-// Delete single recipe category
+// Delete single food type
 router.delete('/:id', async (req, res) => {
 	const foodType = await FoodType.findByIdAndDelete(req.params.id);
 	

@@ -24,9 +24,9 @@ mongoose.connect('mongodb://localhost/recipesApp',  { useNewUrlParser: true, use
 
 // Routes
 const home = require('./routes/home');
-const categories = require('./routes/foodTypes');
+const foodTypes = require('./routes/foodTypes');
 
-app.use('/api/food-types', categories);
+app.use('/api/food-types', foodTypes);
 app.use('/', home);
 
 // Start web server
