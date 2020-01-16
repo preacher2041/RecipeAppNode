@@ -10,7 +10,7 @@ const databaseDebugger = require('debug')('app:database');
 app.use(express.json());
 app.use(helmet());
 
-if (app.get('env') === 'development') {
+if (process.env.NODE_ENV === 'development ') {
 	app.use(morgan('tiny'));
 	startupDebugger('Development mode');
 }
@@ -21,30 +21,6 @@ const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/recipesApp',  { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => databaseDebugger('Connected to MongoDB'))
 	.catch((err) => databaseDebugger('Could not connect to MongoDB', err));
-
-const categorySchema = new mongoose.Schema({
-	name: String,
-	author: String,
-	tags: [String],
-	date: {type: Date, default: Date.now},
-	isPublished: Boolean
-});
-
-const Category = mongoose.model('Category', categorySchema);
-
-const createCategory = async () => {
-	const category = new Category({
-		name: 'Beef',
-		author: 'preacher2041',
-		tags: ['tag1', 'tag2'],
-		isPublished: true
-	});
-	
-	const result = await category.save();
-	databaseDebugger(result);
-};
-
-createCategory();
 
 // Routes
 const home = require('./routes/home');

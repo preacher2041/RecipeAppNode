@@ -1,6 +1,30 @@
 const express = require('express');
 const Joi = require('@hapi/joi');
 const router = express.Router();
+const mongooseDebugger = require('debug')('app:mongoose');
+const {Category} = require('../models/category');
+
+const createCategory = async () => {
+	const category = new Category({
+		name: 'Beef',
+		author: 'preacher2041',
+		tags: ['tag1', 'tag2'],
+		isPublished: true
+	});
+	
+	const result = await category.save();
+	mongooseDebugger(result);
+};
+
+createCategory();
+
+// const getCategories = async () => {
+// 	const categories = await Category.find({author: 'preacher2041'})
+// 		.select({name: 1, tags: 1});
+// 	console.log(categories);
+// };
+//
+// getCategories();
 
 const recipeCategories = [
 	{id: 1, name: 'beef'},
