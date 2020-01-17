@@ -20,8 +20,11 @@ router.post('/', async (req, res) => {
 	let recipe = new Recipe(
 		{
 			name: req.body.name,
+			foodType: req.body.foodType,
 			ingredients: req.body.ingredients,
-			method: req.body.method
+			method: req.body.method,
+			author: req.body.author,
+			tags: req.body.tags
 		}
 	);
 	recipe = await recipe.save();
@@ -48,8 +51,11 @@ router.put('/:id', async (req, res) => {
 	let recipe = await Recipe.findByIdAndUpdate(req.params.id,
 		{
 			name: req.body.name,
+			foodType: req.body.foodType,
 			ingredients: req.body.ingredients,
-			method: req.body.method
+			method: req.body.method,
+			author: req.body.author,
+			tags: req.body.tags
 		},
 		{
 			new: true
