@@ -42,5 +42,5 @@ const validate = (category) => {
 	return schema.validate(category);
 };
 
-exports.Ingredients = Ingredient;
+exports.Ingredient = Ingredient;
 exports.validate = validate;

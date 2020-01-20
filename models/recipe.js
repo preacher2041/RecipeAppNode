@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Joi = require('@hapi/joi');
+const {userSchema} = require('./user');
 
 const Recipe = mongoose.model('Recipe', new mongoose.Schema({
 	name: {
@@ -22,11 +23,11 @@ const Recipe = mongoose.model('Recipe', new mongoose.Schema({
 				minlength: 3,
 				maxlength: 20
 			},
-			amount: {
+			quantity: {
 				type: Number,
 				required: true
 			},
-			measurement: {
+			unit: {
 				type: String,
 				required: true,
 				minlength: 3,
@@ -39,17 +40,12 @@ const Recipe = mongoose.model('Recipe', new mongoose.Schema({
 			step: {
 				type: String,
 				required: true,
-				minlength: 20,
+				minlength: 10,
 				maxlength: 500
 			}
 		}
 	],
-	author: {
-		type: String,
-		required: true,
-		minlength: 3,
-		maxlength: 20
-	},
+	author: userSchema,
 	tags: [
 		{
 			name: {
@@ -64,16 +60,18 @@ const Recipe = mongoose.model('Recipe', new mongoose.Schema({
 
 const validate = (recipe) => {
 	const schema = Joi.object({
-		name: Joi.string().min(5).max(50).required(),
 		foodType: Joi.string().min(3).max(20).required(),
 		ingredients: Joi.array().items(Joi.object({
 			name: Joi.string().min(3).max(20).required(),
-			amount: Joi.number().required(),
+			quantity: Joi.number().required(),
 			unit: Joi.string().min(3).max(15).required()
 		})),
-		method: Joi.array.items(Joi.string().min(20).max(50).required()),
-		author: Joi.string().min(3).max(20).required(),
-		tags: Joi.array.items(Joi.string().min(3).max(15).required()),
+		method: Joi.array().items(Joi.object({
+			step: Joi.string().min(10).max(50).required()
+		})),
+		tags: Joi.array().items(Joi.object({
+			name: Joi.string().min(3).max(15).required()
+		}))
 		
 	});
 	

@@ -21,7 +21,8 @@ router.post('/', async (req, res) => {
 		{
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
-			email: req.body.email
+			emailAddress: req.body.emailAddress,
+			username: req.body.username
 		}
 	);
 	user = await user.save();

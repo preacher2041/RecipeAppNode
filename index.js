@@ -8,6 +8,7 @@ const startupDebugger = require('debug')('app:startup');
 const databaseDebugger = require('debug')('app:database');
 
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 app.use(helmet());
 
 if (process.env.NODE_ENV === 'development') {
