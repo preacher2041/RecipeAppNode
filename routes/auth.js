@@ -10,7 +10,7 @@ router.post('/', async (req, res) => {
 	if (error) return res.status(400).send(error.details[0].message);
 	
 	// Check if user exists
-	let user = await User.findOne({email: req.body.email});
+	let user = await User.findOne({emailAddress: req.body.emailAddress});
 	if (!user) return res.status(400).send('Invalid email or password.');
 	
 	// Compare sent password with stored password

@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const mongooseDebugger = require('debug')('app:mongoose');
+const auth = require('../middleware/auth')
+const admin = require('../middleware/admin')
 const {Ingredient, validate} = require('../models/ingredient');
 
 // Get all ingredients
@@ -66,7 +68,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete single ingredient
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', [auth, admin], async (req, res) => {
 	const ingredient = await Ingredient.findByIdAndDelete(req.params.id);
 	
 	if (!ingredient) return res.status(400).send('The ingredient with the given id was not found');

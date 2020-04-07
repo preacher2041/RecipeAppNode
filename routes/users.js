@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const auth = require('../middleware/auth');
 const express = require('express');
 const bcrypt = require('bcrypt');
 const router = express.Router();
@@ -6,11 +7,8 @@ const mongooseDebugger = require('debug')('app:mongoose');
 const {User, validate} = require('../models/user');
 
 // Get all users
-router.get('/', async (req, res) => {
-	const user = await User
-		.find()
-		.sort('name');
-	
+router.get('/me', auth, async (req, res) => {
+	const user = await User.findById(req.user._id).select('-password');
 	res.send(user);
 });
 
@@ -20,11 +18,11 @@ router.post('/', async (req, res) => {
 	if (error) return res.status(400).send(error.details[0].message);
 	
 	// Check to see if user already exists
-	// let user = User.findOne({ email: req.body.email});
+	let user = User.findOne({ emailAddress: req.body.emailAddress});
 	
-	// if (user) return res.status(400).send('User already registered.');
+	if (user) return res.status(400).send('User already registered.');
 	
-	let user = new User(
+	user = new User(
 		_.pick(req.body, [
 			'firstName',
 			'lastName',
