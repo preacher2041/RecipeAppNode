@@ -5,20 +5,26 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "start dev": "export NODE_ENV=development && export DEBUG=app:* && nodemon index.js",
+    "start dev": "export NODE_ENV=development && export DEBUG=app:* && export recipes_jwtPrivateKey=mySecureKey && nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^4.0.1",
+    "config": "^3.3.1",
     "debug": "^4.1.1",
+    "fawn": "^2.1.5",
     "helmet": "^3.21.2",
+    "jsonwebtoken": "^8.5.1",
+    "loadash": "^1.0.0",
     "mongoose": "^5.8.7",
     "morgan": "^1.9.1"
   },
   "devDependencies": {
     "@hapi/joi": "^16.1.8",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "nodemon": "^2.0.2"
   }
 }

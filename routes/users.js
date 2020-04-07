@@ -1,4 +1,6 @@
+const _ = require('lodash');
 const express = require('express');
+const bcrypt = require('bcrypt');
 const router = express.Router();
 const mongooseDebugger = require('debug')('app:mongoose');
 const {User, validate} = require('../models/user');
@@ -17,18 +19,29 @@ router.post('/', async (req, res) => {
 	const {error} = validate(req.body);
 	if (error) return res.status(400).send(error.details[0].message);
 	
-	let user = new User(
-		{
-			firstName: req.body.firstName,
-			lastName: req.body.lastName,
-			emailAddress: req.body.emailAddress,
-			username: req.body.username
-		}
-	);
-	user = await user.save();
-	mongooseDebugger(user);
+	// Check to see if user already exists
+	// let user = User.findOne({ email: req.body.email});
 	
-	res.send(user);
+	// if (user) return res.status(400).send('User already registered.');
+	
+	let user = new User(
+		_.pick(req.body, [
+			'firstName',
+			'lastName',
+			'emailAddress',
+			'username',
+			'password'
+		])
+	);
+	
+	const salt = await bcrypt.genSalt(10, );
+	user.password = await bcrypt.hash(user.password, salt);
+	await user.save();
+	
+	mongooseDebugger(_.pick(user, ['_id', 'firstName', 'lastName', 'emailAddress', 'username']));
+	
+	const token = user.generateAuthToken();
+	res.header('x-auth-token', token).send(_.pick(user, ['_id', 'firstName', 'lastName', 'emailAddress', 'username']));
 });
 
 // Get single user
@@ -50,7 +63,8 @@ router.put('/:id', async (req, res) => {
 		{
 			firstName: req.body.firstName,
 			lastName: req.body.lastName,
-			email: req.body.email
+			email: req.body.email,
+			password: req.body.password,
 		},
 		{
 			new: true

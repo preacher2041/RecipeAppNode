@@ -60,6 +60,7 @@ const Recipe = mongoose.model('Recipe', new mongoose.Schema({
 
 const validate = (recipe) => {
 	const schema = Joi.object({
+		name: Joi.string().min(3).max(50).required(),
 		foodType: Joi.string().min(3).max(20).required(),
 		ingredients: Joi.array().items(Joi.object({
 			name: Joi.string().min(3).max(20).required(),
@@ -69,6 +70,13 @@ const validate = (recipe) => {
 		method: Joi.array().items(Joi.object({
 			step: Joi.string().min(10).max(50).required()
 		})),
+		author: Joi.object({
+			firstName: Joi.string().min(3).max(20).required(),
+			lastName: Joi.string().min(3).max(20).required(),
+			emailAddress: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'co'] } }).min(3).max(50).required(),
+			username: Joi.string().min(3).max(20).required(),
+			password: Joi.string().min(3).max(100).required()
+		}),
 		tags: Joi.array().items(Joi.object({
 			name: Joi.string().min(3).max(15).required()
 		}))

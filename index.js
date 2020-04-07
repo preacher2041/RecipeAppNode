@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const config = require('config');
 
 // Middleware
 const helmet = require('helmet');
@@ -19,6 +20,11 @@ if (process.env.NODE_ENV === 'development') {
 // Database
 const mongoose = require('mongoose');
 
+if (!config.get('jwtPrivateKey')) {
+	console.error('FATAL ERROR: jwtPrivateKey is not defined');
+	process.exit(1);
+}
+
 mongoose.connect('mongodb://localhost/recipesApp',  { useNewUrlParser: true, useUnifiedTopology: true })
 	.then(() => databaseDebugger('Connected to MongoDB'))
 	.catch((err) => databaseDebugger('Could not connect to MongoDB', err));
@@ -31,6 +37,7 @@ const ingredients = require('./routes/ingredients');
 const recipes = require('./routes/recipes');
 const shoppingLists = require('./routes/shoppingLists');
 const users = require('./routes/users');
+const auth = require('./routes/auth');
 
 app.use('/api/food-cupboards', foodCupboards);
 app.use('/api/food-types', foodTypes);
@@ -38,6 +45,7 @@ app.use('/api/ingredients', ingredients);
 app.use('/api/recipes', recipes);
 app.use('/api/shopping-list', shoppingLists);
 app.use('/api/users', users);
+app.use('/api/auth', auth);
 app.use('/', home);
 
 // Start web server

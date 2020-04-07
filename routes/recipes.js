@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const mongooseDebugger = require('debug')('app:mongoose');
+const  auth = require('../middleware/auth');
 const {Recipe, validate} = require('../models/recipe');
 
 // Get all recipes
@@ -13,7 +14,7 @@ router.get('/', async (req, res) => {
 });
 
 // Create new recipe
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
 	const {error} = validate(req.body);
 	if (error) return res.status(400).send(error.details[0].message);
 	
